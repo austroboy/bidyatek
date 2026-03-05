@@ -1,9 +1,15 @@
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
-from .models import Contact
+from django.apps import apps
+from django.db import models
 
-@admin.register(Contact)
-class ContactAdmin(ImportExportModelAdmin):
-    list_display = ['name', 'email', 'subject', 'created_at']
-    search_fields = ['name', 'email', 'subject']
-    readonly_fields = ['created_at']
+app_name = "contact"
+models_list = apps.get_app_config(app_name).get_models()
+
+for model in models_list:
+    class DynamicAdmin(admin.ModelAdmin):
+        list_display = [field.name for field in model._meta.fields]
+        
+    try:
+        admin.site.register(model, DynamicAdmin)
+    except admin.sites.AlreadyRegistered:
+        pass

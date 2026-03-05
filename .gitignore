@@ -2,11 +2,12 @@
 __pycache__/
 *.py[cod]
 *.log
+*.pyc
 
 # Virtual env
 venv/
 .env
-
+env/
 # Django
 db.sqlite3
 media/

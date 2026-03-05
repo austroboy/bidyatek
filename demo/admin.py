@@ -1,17 +1,15 @@
 from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
-from .models import DemoRequest
+from django.apps import apps
+from django.db import models
 
-@admin.register(DemoRequest)
-class DemoRequestAdmin(ImportExportModelAdmin):
-    list_display = ['school_name', 'contact_person', 'email', 'status', 'created_at']
-    list_filter = ['status', 'preferred_institute_type']
-    search_fields = ['school_name', 'contact_person', 'email']
-    list_editable = ['status']
-    actions = ['export_as_csv']
-    readonly_fields = ['created_at', 'updated_at']
+app_name = "demo"
+models_list = apps.get_app_config(app_name).get_models()
 
-    def export_as_csv(self, request, queryset):
-        # Use import-export
+for model in models_list:
+    class DynamicAdmin(admin.ModelAdmin):
+        list_display = [field.name for field in model._meta.fields]
+        
+    try:
+        admin.site.register(model, DynamicAdmin)
+    except admin.sites.AlreadyRegistered:
         pass
-    export_as_csv.short_description = "Export selected to CSV"

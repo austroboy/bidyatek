@@ -1,7 +1,15 @@
 from django.contrib import admin
-from .models import FAQ
+from django.apps import apps
+from django.db import models
 
-@admin.register(FAQ)
-class FAQAdmin(admin.ModelAdmin):
-    list_display = ['question_en', 'order', 'is_active']
-    list_editable = ['order', 'is_active']
+app_name = "faq"
+models_list = apps.get_app_config(app_name).get_models()
+
+for model in models_list:
+    class DynamicAdmin(admin.ModelAdmin):
+        list_display = [field.name for field in model._meta.fields]
+        
+    try:
+        admin.site.register(model, DynamicAdmin)
+    except admin.sites.AlreadyRegistered:
+        pass
