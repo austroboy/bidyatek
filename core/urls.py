@@ -11,7 +11,8 @@ router.register(r'how-it-works', HowItWorksStepViewSet)
 router.register(r'live-counters', LiveCounterViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('site-settings/', SiteSettingsView.as_view(), name='site-settings'),
     path('newsletter/subscribe/', NewsletterSubscribeView.as_view(), name='newsletter-subscribe'),
+    path('', include(router.urls)),
+    
 ]

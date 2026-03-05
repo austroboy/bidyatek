@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'gallery',
     'testimonials',
     'faq',
+    'django_ratelimit'
 ]
 
 MIDDLEWARE = [
@@ -143,7 +144,7 @@ ADMIN_URL = config('ADMIN_URL', default='admin/')
 
 # Security hardening for production
 # if not DEBUG:
-#     SECURE_SSL_REDIRECT = True
+#     # SECURE_SSL_REDIRECT = True
 #     SESSION_COOKIE_SECURE = True
 #     CSRF_COOKIE_SECURE = True
 #     SECURE_BROWSER_XSS_FILTER = True
@@ -152,3 +153,10 @@ ADMIN_URL = config('ADMIN_URL', default='admin/')
 #     SECURE_HSTS_SECONDS = 31536000
 #     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 #     SECURE_HSTS_PRELOAD = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379',
+    }
+}

@@ -1,8 +1,15 @@
 from django.contrib import admin
-from .models import School
+from django.apps import apps
+from django.db import models
 
-@admin.register(School)
-class SchoolAdmin(admin.ModelAdmin):
-    list_display = ['name', 'location', 'order', 'is_active']
-    list_editable = ['order', 'is_active']
-    search_fields = ['name']
+app_name = "schools"
+models_list = apps.get_app_config(app_name).get_models()
+
+for model in models_list:
+    class DynamicAdmin(admin.ModelAdmin):
+        list_display = [field.name for field in model._meta.fields]
+        
+    try:
+        admin.site.register(model, DynamicAdmin)
+    except admin.sites.AlreadyRegistered:
+        pass

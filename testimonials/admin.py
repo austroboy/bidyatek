@@ -1,8 +1,15 @@
 from django.contrib import admin
-from .models import Testimonial
+from django.apps import apps
+from django.db import models
 
-@admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
-    list_display = ['author_name', 'school_name', 'rating', 'order', 'is_active']
-    list_editable = ['order', 'is_active']
-    list_filter = ['rating']
+app_name = "testimonials"
+models_list = apps.get_app_config(app_name).get_models()
+
+for model in models_list:
+    class DynamicAdmin(admin.ModelAdmin):
+        list_display = [field.name for field in model._meta.fields]
+        
+    try:
+        admin.site.register(model, DynamicAdmin)
+    except admin.sites.AlreadyRegistered:
+        pass
