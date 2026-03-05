@@ -28,7 +28,7 @@ class LiveCounterSerializer(serializers.ModelSerializer):
 
 class NewsletterSubscribeSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    recaptcha_token = serializers.CharField(write_only=True)
+    # recaptcha_token = serializers.CharField(write_only=True)
 
     def validate_recaptcha_token(self, value):
         if not validate_recaptcha(value):
