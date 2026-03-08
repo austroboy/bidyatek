@@ -25,7 +25,7 @@ class SiteSettings(models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)
-
+ 
     @classmethod
     def get_settings(cls):
         obj, created = cls.objects.get_or_create(pk=1)
