@@ -6,6 +6,10 @@ class Module(models.Model):
     name_bn = models.CharField(max_length=100, blank=True)
     description_en = models.TextField()
     description_bn = models.TextField(blank=True)
+    tag_en = models.CharField(max_length=100, blank=True,default="")
+    tag_bn = models.CharField(max_length=100, blank=True,default="")
+    stat_en = models.CharField(max_length=100, blank=True,default="")
+    stat_bn = models.CharField(max_length=100, blank=True,default="")
     icon = models.ImageField(upload_to='modules/icons/', blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
 

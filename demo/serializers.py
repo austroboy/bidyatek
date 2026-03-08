@@ -14,3 +14,6 @@ class DemoRequestSerializer(serializers.ModelSerializer):
         if not validate_recaptcha(value):
             raise serializers.ValidationError('reCAPTCHA validation failed.')
         return value
+    def create(self, validated_data):
+        validated_data.pop('recaptcha_token', None)
+        return super().create(validated_data)
